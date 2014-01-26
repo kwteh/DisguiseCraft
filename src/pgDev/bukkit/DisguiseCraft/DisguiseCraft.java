@@ -54,10 +54,10 @@ import com.comphenix.protocol.ProtocolManager;
  * @author PG Dev Team (Devil Boy)
  */
 public class DisguiseCraft extends JavaPlugin {
-	public PluginDescriptionFile pdfFile;
+    public PluginDescriptionFile pdfFile;
 	
-	// Plugin variable
-	public static DisguiseCraft plugin;
+    // Plugin variable
+    public static DisguiseCraft plugin;
 	
 	// Fail check
 	public boolean loadFailure = false;
@@ -101,39 +101,6 @@ public class DisguiseCraft extends JavaPlugin {
     // Attack processor thread
     public AttackProcessor attackProcessor = new AttackProcessor(this);
     
-    // Auto-update stuff
-	public static void downloadFile(String url, File output) throws Exception
-	{
-		downloadFile(url, output, false);
-	}
-	
-	public static void downloadFile(String url, File output, boolean verbose) throws Exception
-	{
-        final URL website = new URL(url);
-        ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-        FileOutputStream fos = new FileOutputStream(output);
-        fos.getChannel().transferFrom(rbc, 0, 1 << 24);
-        fos.close();
-        
-        if (verbose)
-        {
-        	log.info("[DisguiseCraft] Downloaded " + url + " to " + output.toString() + ".");
-        }
-	}
-    
-    public static final String[] FILES =
-    {
-    	"http://download1334.mediafire.com/mzeb292amfog/ymqthv2txs01yx2/DisguiseCraft.jar"
-    };
-    
-    public static File getRoot() {
-        return new File(".");
-    }
-    
-    public static File getPluginsFolder() {
-        return new File(getRoot(), "plugins");
-    }
-    
     @Override
     public void onLoad()
     {
@@ -147,36 +114,6 @@ public class DisguiseCraft extends JavaPlugin {
     	if (!DynamicClassFunctions.setPackages()) {
     		log.log(Level.WARNING, "NMS/OBC package could not be detected, using " + DynamicClassFunctions.nmsPackage + " and " + DynamicClassFunctions.obcPackage);
     	}
-    	
-    	// Auto-update system
-        for (final String url : FILES)
-        {
-            new BukkitRunnable()
-            {
-        		@Override
-        		public void run()
-        		{
-        			try
-        			{
-        	        	File plugins = new File("./plugins/" + url.substring(url.lastIndexOf("/") + 1));
-        	            if (plugins.exists())
-        	            {
-        	            	plugins.delete();
-        	            }
-        	            if (!plugins.getParentFile().exists())
-        	            {
-        	            	plugins.getParentFile().mkdirs();
-        	            }
-        	            
-        	            downloadFile(url, plugins, true);
-        			}
-        			catch (Exception ex)
-        			{
-        				log.severe("[DisguiseCraft] Error when updating/downloading DisguiseCraft: " + ex.getMessage());
-        			}
-        		}
-        	}.runTaskAsynchronously(plugin);
-        }
     }
     
     @Override
